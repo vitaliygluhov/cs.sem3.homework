@@ -36,220 +36,158 @@ void Task23(int Num)
         Console.WriteLine((Math.Pow(i, 3)));
     }
 }
-//              ДОПОЛНИТЕЛЬНЫЕ ЗАДАНИЯ
 
-//              ЗАДАНИЯ ПОВЫШЕННОЙ СЛОЖНОСТИ
+//---------------------------------------------------------------------------------------------------------------------------
+// переменные меню
+string[] TaskKey = new string[]{"1",
+                                "2",
+                                "3"
+                                };
+string[] TaskName = new string[]{"Задача 19",
+                                "Задача 21",
+                                "Задача 23"
+                                };
+string[] TaskDescription = new string[]{"Напишите программу, которая принимает на вход пятизначное число и проверяет, является ли оно палиндромом.",
+                                       "Напишите программу, которая принимает на вход координаты двух точек и находит расстояние между ними в 3D пространстве.",
+                                        "Напишите программу, которая принимает на вход число (N) и выдаёт таблицу кубов чисел от 1 до N."
+                                };
+string[] TaskNote = new string[]{"Введите пятизначное число:",
+                                "Введите координаты двух точек в 3D пространстве в формате x1 y1 z1 x2 y2 z2:",
+                                "Введите число:"
+                                };
 
-//Задача 1. На ввод подаётся номер четверти. Создаются 3 случайные точки в этой четверти. Определите самый оптимальный маршрут для торгового менеджера, который выезжает из центра координат.
-void AddDiffTask1(int Quarter)
+void TaskExecute(int ItemIndex, string[] Arguments)
 {
-    int NodeAmount = 8; // количество узлов
-
-    int[] NodeX = new int[NodeAmount];
-    int[] NodeY = new int[NodeAmount];
-    bool[] NodeFlag = new bool[NodeAmount]; //флаг посищения
-
-    int CurNode = 0; // текущая нода
-
-    double[,] Graph = new double[NodeAmount, NodeAmount];
-
-    double Way = 0; // весь путь
-    int StepCount = 0;
-
-    Random rnd = new Random();
-    int xr = 0;
-    int yr = 0;
-    switch (Quarter)
+    // Console.WriteLine("debag point 0"); // DEBAG
+    switch (ItemIndex)
     {
+        case 0:
+            Task19(Convert.ToInt32(Arguments[0]));
+            break;
         case 1:
-            xr = 0;
-            yr = 0;
+            Task21(Convert.ToInt32(Arguments[0]),
+                    Convert.ToInt32(Arguments[1]),
+                    Convert.ToInt32(Arguments[2]),
+                    Convert.ToInt32(Arguments[3]),
+                    Convert.ToInt32(Arguments[4]),
+                    Convert.ToInt32(Arguments[5]));
             break;
         case 2:
-            xr = 0;
-            yr = 100;
-            break;
-        case 3:
-            xr = 100;
-            yr = 100;
-            break;
-        case 4:
-            xr = 100;
-            yr = 0;
+            Task23(Convert.ToInt32(Arguments[0]));
             break;
     }
+}
 
 
-    for (int i = 1; i < NodeAmount; i++)
+
+
+// методы оболочки
+void MenuItem(string Key, string InemName, string InemDescription)// вывод элементов меню
+{
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.Write(Key);
+    Console.ResetColor();
+    Console.WriteLine($" - {InemName}: {InemDescription}");
+}
+void MenuSysItem(string Key, string InemName) // вывод системных пунктов  меню
+{
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.Write(Key);
+    Console.ResetColor();
+    Console.WriteLine($" - {InemName}");
+}
+void ShowMainMenu() // отрисовка меню
+{
+    Console.Clear();
+    for (int i = 0; i < TaskKey.Length; i++)
     {
-        //ген. коорд.
-
-        NodeX[i] = rnd.Next(0 - xr, 100 - xr);
-        NodeY[i] = rnd.Next(0 - yr, 100 - yr);
+        MenuItem(TaskKey[i], TaskName[i], TaskDescription[i]);
     }
-    double MaxWeight = 0;
-    for (int i = 0; i < NodeAmount; i++) // создаем таблицу весов ребер
-        for (int j = 0; j < NodeAmount; j++)
-        {
-            Graph[i, j] = Math.Round(Math.Sqrt(Math.Pow(NodeX[j] - NodeX[i], 2) + Math.Pow(NodeY[j] - NodeY[i], 2)), 2);
-            if (MaxWeight < Graph[i, j])
-                MaxWeight = Graph[i, j];
-        }
+    MenuSysItem("q", "Выход из программы");
+    Console.Write("Введите выбраный пункт меню: ");
+}
 
+// сообщения
+void ShowErrorMsg(string msg)
+{
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.Write(msg);
+    Console.ResetColor();
+}
 
-    // начинаем движение (не забыть заключить в цикл)
-    while (StepCount < NodeAmount - 1)
+// отрисовка заданий 
+void ShowTask(int ItemIndex)
+{
+
+    bool TaskActive = true; // Состояние задачи. если true, значит активна, и будет выполнятся пока состояние не изменится на false
+    while (TaskActive) // повторяет задание пока  пользователь выбирает повторить
     {
-        double MinWeight = 0; // минимальный вес соседней
-        int MinWeightIndex = 0; // индекс нода сминимальным значением
-        NodeFlag[CurNode] = true;
-        MinWeight = 100000000; //Graph[CurNode, NodeAmount - 1];
-        for (int i = 0; i < NodeAmount; i++)// ищем ближайшую от текущей
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine(TaskName[ItemIndex]);
+        Console.ResetColor();
+        Console.WriteLine(TaskDescription[ItemIndex]);
+        Console.Write(TaskNote[ItemIndex]);
+
+        string InputText = Console.ReadLine(); // ввод пользовательских данных
+        string[] InputWords = InputText.Split(" "); // парсинг введенного текста. раскладываем строку на слова
+        TaskExecute(ItemIndex, InputWords);// вызывается выполнение задачи
+        //tmp
+
+
+        // Exit Dialog
+        bool ExitDialogActive = true;
+        while (ExitDialogActive) // удерживает пользователя в меню выхода пока не будет выбран один из предусмотренных пунктов.
         {
-            if (CurNode != i && !NodeFlag[i] && Graph[CurNode, i] < MinWeight) // не сравнивается с собой && не посищалась && текущий легче сохраненного
+            Console.WriteLine("Выберите действие");
+            MenuSysItem("r", "Повторить выполнение задания");
+            MenuSysItem("m", "Вернуться в главное меню");
+            MenuSysItem("q", "Завершить программу");
+            Console.Write("Введите выбраный пункт: ");
+
+            string SlectItem = Console.ReadLine().ToLower();
+            if (SlectItem == "r")
             {
-                MinWeight = Graph[CurNode, i];  // адрес ноды с минимальным значением
-                MinWeightIndex = i; // адрес ноды с минимальным значением
+                TaskActive = true;
+                ExitDialogActive = false;
+            }
+            else if (SlectItem == "m")
+            {
+                TaskActive = false;
+                ExitDialogActive = false;
+                ShowMainMenu();
+            }
+            else if (SlectItem == "q")
+            {
+                Console.Clear();
+                System.Environment.Exit(0);
             }
         }
-        StepCount++;
-        Way += MinWeight;
-        Console.Write($"//Шаг {StepCount}. Переход от ноды {CurNode} к ноде {MinWeightIndex} на расстоянии {MinWeight}. Общий путь: {Way}\r\n");
-        Console.Write($"Canvas->LineTo({NodeX[MinWeightIndex]},{NodeY[MinWeightIndex]});\r\n");
-        CurNode = MinWeightIndex;
     }
 
+}
+//======================================================================================================================
+ShowMainMenu(); // выводим главное меню
+while (true) // выполняется пока пользователь не завершит программу 
+{
+    string SlectItem = Console.ReadLine(); // обработка выбора меню
+    SlectItem = SlectItem.ToLower();
 
-
-    //Report
-    Console.WriteLine($"Вусь путь пройден за {Way}\r\n");
-    Console.WriteLine("    Таблица веса ребер");
-    Console.WriteLine("\t0\t1\t2\t3");
-    Console.WriteLine("\t______________________________________");
-    for (int Y = 0; Y < NodeAmount; Y++)
+    if (SlectItem != "q")
     {
-        Console.Write(Y + " |");
-        for (int X = 0; X < NodeAmount; X++)
+        int SlectItemInt; //проверка  - является ли введенное значение числом
+        if (int.TryParse(SlectItem, out SlectItemInt) == true && SlectItemInt <= TaskKey.Length && SlectItemInt > 0)
         {
-            if (Graph[X, Y] >= 100)
-                Console.Write($"\t{Graph[X, Y]}");
-            else if (Graph[X, Y] >= 10 && (Graph[X, Y] < 100))
-                Console.Write($"\t{Graph[X, Y]}");
-            else Console.Write($"\t{Graph[X, Y]}");
+            ShowTask(SlectItemInt - 1); // вызываем страницу задания
         }
-        Console.WriteLine("");
-    }
-    Console.WriteLine("");
-    for (int i = 0; i < NodeAmount; i++)
-        Console.WriteLine($"{i} нода: {NodeX[i]} x {NodeY[i]}");
-// Var 2 перебор всех комбинаций
-//CurNode = 0; // текущая нода
-//Way = 0; // весь путь
-//StepCount = 0;
-
-}
-
-
-void AddDiffTask2()
-{
-    //
-}
-
-void AddDiffTask3()
-{
-    //
-}
-// Задача 4. Дан массив средних температур (массив заполняется случайно) за последние 10 лет. На ввод подают номер месяца и год начали и конца.
-void AddDiffTask4()
-{
-    //for(int i = 0;)
-}
-// Задача 5. На вход подаётся число n > 4, указывающее длину пароля. Создайте метод, 
-// генерирующий пароль заданной длины. В пароле обязательно использовать цифру, букву и специальный знак.
-void AddDiffTask5(int Length)
-{
-    // var 1
-    string Characters = "1234567890AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz!?@#$%^&*()";
-    Random Rnd = new Random();
-    string Password = "";
-    for (int i = 0; i < Length; i++)
-    {
-        Password += Characters.Substring(Rnd.Next(0, Characters.Length), 1);
-    }
-    Console.WriteLine($"Сгенерирован пароль длинною {Length} символов: {Password}");
-}
-
-void AddDiffTask6()
-{
-    //
-}
-//Задача 7. Массив из ста элементов заполняется случайными числами от 1 до 100. Удалить из массива все элементы, содержащие цифру 3. Вывести в консоль новый массив и количество удалённых элементов.
-void AddDiffTask7()
-{
-    // Вариант с удалением значения в массиве
-    /*
-    int[] Arr = new int[100];
-    int[] ArrOut = new int[100];
-    Random Rnd = new Random();
-    for (int i = 0; i < Arr.Length; i++)
-        Arr[i] = Rnd.Next(1, 100);
-    int DelCount = 0;
-    for (int i = 0; i < Arr.Length; i++)
-    {
-        if (Arr[i] != 3)
-            ArrOut[i] = Arr[i];
-        else DelCount++;
-    }
-
-    for (int i = 0; i < ArrOut.Length; i++)
-        Console.Write($"{ArrOut[i]} ");
-    Console.WriteLine($"\r\n Удалено троек: {DelCount}");
-    */
-    // Вариант с удалением элемента массива (уменьшение размера массива)
-    int[] Arr = new int[100];
-
-    int TCount = 0;
-    Random Rnd = new Random();
-    for (int i = 0; i < Arr.Length; i++)
-    {
-        Arr[i] = Rnd.Next(1, 100);
-        if (Arr[i] == 3)
-            TCount++;
-    }
-    int[] ArrOut = new int[Arr.Length - TCount];
-    int DelCount = 0;
-    for (int i = 0, j = 0; i < Arr.Length; i++)
-    {
-        if (Arr[i] != 3)
+        else
         {
-            ArrOut[j] = Arr[i];
-            j++;
+            ShowErrorMsg("Введен неверный пункт меню. попробуйте еще раз: ");
         }
-        else DelCount++;
     }
-
-    for (int i = 0; i < ArrOut.Length; i++)
-        Console.Write($"{ArrOut[i]} ");
-    Console.WriteLine($"\r\n\r\nУдалено троек: {DelCount}");
-    Console.WriteLine($"Новая длина массива: {ArrOut.Length}");
+    else
+    {
+        Console.Clear();
+        System.Environment.Exit(0);
+    }
 }
-Console.Clear();
-
-void AddDiffTask8()
-{
-    //
-}
-
-void AddDiffTask9()
-{
-    //
-}
-
-
-
-//Task19(123454321);
-//Task21(10, 20, 30, 40, 50, 60);
-//Task23(23);
-//AddDiffTask5(20);
-//AddDiffTask7();
-AddDiffTask1(1);
