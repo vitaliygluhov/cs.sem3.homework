@@ -271,6 +271,20 @@ void AddDiffTask5(int PassLength)
     }
     Console.WriteLine($"Сгенерирован пароль длинною {PassLength} символов: {Password}");
 }
+//Задача 6. Из центра координат к точке А(x, y) проведён отрезок АО. 
+//          Напишите программу, определяющую наименьший угол наклона 
+//          отрезка AO к оси X.
+
+void AddDiffTask6(double x, double y)
+{
+    double Alpha, Beta;
+    x = Math.Abs(x);
+    y = Math.Abs(y);
+    Alpha = Math.Atan(x / y);
+    Beta = Math.Atan(y / x);
+    //Console.WriteLine(Alpha*(180/Math.PI)+90);
+    Console.WriteLine($"Наименьший угол наклона к оси x составляет {Math.Round(Beta * (180 / Math.PI), 2)} гр.");
+}
 //Задача 7. Массив из ста элементов заполняется случайными числами от 1 до 100. Удалить из массива все элементы, содержащие цифру 3. Вывести в консоль новый массив и количество удалённых элементов.
 void AddDiffTask7()
 {
@@ -309,12 +323,12 @@ void AddDiffTask7()
 void AddDiffTask8()
 {
     Random Rnd = new Random();
-    int n = Rnd.Next(2,101);
-    for(int i = 1; i<=n; i++)
+    int n = Rnd.Next(2, 101);
+    for (int i = 1; i <= n; i++)
     {
-        for(int j = 1; j<=10; j++)
+        for (int j = 1; j <= 10; j++)
         {
-            Console.WriteLine($"{i} * {j} = {i*j}");
+            Console.WriteLine($"{i} * {j} = {i * j}");
         }
         Console.WriteLine();
     }
@@ -370,7 +384,7 @@ string[] TaskDescription = new string[]{"Напишите программу, к
                                         "\t\tЕЩЕ НЕ РЕШЕНА",
                                         "\t\tЕЩЕ НЕ РЕШЕНА",
                                         "На вход подаётся число n > 4, указывающее длину пароля. Создайте метод, генерирующий пароль заданной длины. В пароле обязательно использовать цифру, букву и специальный знак.",
-                                        "\t\tЕЩЕ НЕ РЕШЕНА",
+                                        "Из центра координат к точке А(x, y) проведён отрезок АО. Напишите программу, определяющую наименьший угол наклона отрезка AO к оси X.",
                                         "Массив из ста элементов заполняется случайными числами от 1 до 100. Удалить из массива все элементы, содержащие цифру 3. Вывести в консоль новый массив и количество удалённых элементов.",
                                         "Напишите программу, который выводит на консоль таблицу умножения от 1 до n, где n задаётся случайно от 2 до 100.",
                                         "\t\tЕЩЕ НЕ РЕШЕНА"
@@ -387,7 +401,7 @@ string[] TaskNote = new string[]{"Введите пятизначное числ
                                 "Press Enter> ",
                                 "Press Enter> ",
                                 "Введите число больше 4: ",
-                                "Press Enter> ",
+                                "Введите через пробел координаты точки A(x y): ",
                                 "Enter для продолжения: ",
                                 "Enter для продолжения: ",
                                 "Press Enter> "
@@ -440,7 +454,7 @@ void TaskExecute(int ItemIndex, string[] Arguments)
             AddDiffTask5(Convert.ToInt32(Arguments[0]));
             break;
         case 13:
-            //AddDiffTask6();
+            AddDiffTask6(Convert.ToDouble(Arguments[0]), Convert.ToDouble(Arguments[1]));
             break;
         case 14:
             AddDiffTask7();
