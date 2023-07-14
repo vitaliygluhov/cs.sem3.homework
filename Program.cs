@@ -45,47 +45,104 @@ void AddTask1(double x)
     if (x > 0)
         y = Math.Pow(Math.Sin(x), 2);
     else y = 1 - 2 * Math.Sin(Math.Pow(x, 2));
-Console.WriteLine($"При x = {x} по заданной формуле y = {y}");
+    Console.WriteLine($"При x = {x} по заданной формуле y = {y}");
 }
 // Задача 2. Дано трёхзначное число N. Определить кратна ли трём сумма всех его цифр.
 void AddTask2(int InputNumber)
 {
-    //
+    if (InputNumber < 1000 && InputNumber > 99)
+    {
+        int Sum = 0;
+        for (int i = 1; i < 999; i *= 10)
+            Sum += InputNumber / i % 10;
+        if (Sum % 3 == 0)
+            Console.WriteLine($"Сумма цифр числа {InputNumber} равна {Sum} и кратна трем.");
+        else Console.WriteLine($"Сумма цифр числа {InputNumber} равна {Sum} и НЕ кратна трем.");
+    }
+    else Console.WriteLine($"Число {InputNumber} не соответствует заданным критериям.");
 }
-
+// Задача 3. Дано трёхзначное число N. Определить, есть ли среди его цифр 4 или 7.
+void AddTask3(int InputNumber)
+{
+    Console.WriteLine($"Вариант исполнения I");
+    if (InputNumber < 1000 && InputNumber > 99)
+    {
+        bool tmp = false;
+        for (int i = 1; i < 999 && !tmp; i *= 10)
+            if (InputNumber / i % 10 == 4 || InputNumber / i % 10 == 7)
+                tmp = true;
+        if (tmp)
+            Console.WriteLine($"Число {InputNumber} содержит в себе цифру 4 или 7");
+        else Console.WriteLine($"Число {InputNumber} НЕ содержит в себе цифру 4 или 7");
+    }
+    else Console.WriteLine($"Число {InputNumber} не соответствует заданным критериям.");
+    Console.WriteLine($"\r\nВариант исполнения II");
+    if (InputNumber < 1000 && InputNumber > 99)
+    {
+        Console.WriteLine($"Число {InputNumber} содержит в себе цифры: ");
+        for (int i = 1, c =3; i < 999; i *= 10, c--)
+        {
+            if (InputNumber / i % 10 == 4)
+                Console.WriteLine($"4 в позиции {c}");
+            if (InputNumber / i % 10 == 7)
+                Console.WriteLine($"7 в позиции {c}");
+        }
+    }
+    else Console.WriteLine($"Число {InputNumber} не соответствует заданным критериям.");
+}
+// Задача 4. Дан массив длиной 10 элементов. Заполнить его последовательно числами от 1 до 10.
+void AddTask4()
+{
+    int[] Arr = new int[10];
+    for(int i = 0; i < Arr.Length; i++)
+        Arr[i] = i+1;
+    Console.WriteLine(string.Join(" ", Arr));  
+}
 //---------------------------------------------------------------------------------------------------------------------------
 //                   МЕНЮ
 // переменные меню
 string[] TaskKey = new string[]{"1",
                                 "2",
                                 "3",
-                                "4"
+                                "4",
+                                "5",
+                                "6",
+                                "7"
                                 };
 string[] TaskName = new string[]{"Задача 19",
                                 "Задача 21",
                                 "Задача 23",
-                                "Задача 1"
+                                "Задача 1",
+                                "Задача 2",
+                                "Задача 3",
+                                "Задача 4"
                                 };
 string[] TaskDescription = new string[]{"Напишите программу, которая принимает на вход пятизначное число и проверяет, является ли оно палиндромом.",
                                        "Напишите программу, которая принимает на вход координаты двух точек и находит расстояние между ними в 3D пространстве.",
                                         "Напишите программу, которая принимает на вход число (N) и выдаёт таблицу кубов чисел от 1 до N.",
-                                        "Доп. задание: Рассчитать значение y при заданном x по формуле"
+                                        "Доп. задание: Рассчитать значение y при заданном x по формуле",
+                                        "Доп. задание: Дано трёхзначное число N. Определить кратна ли трём сумма всех его цифр.",
+                                        "Доп. задание: Дано трёхзначное число N. Определить, есть ли среди его цифр 4 или 7.",
+                                        "Доп. задание: Дан массив длиной 10 элементов. Заполнить его последовательно числами от 1 до 10."
                                 };
 string[] TaskNote = new string[]{"Введите пятизначное число: ",
                                 "Введите координаты двух точек в 3D пространстве в формате x1 y1 z1 x2 y2 z2: ",
                                 "Введите число: ",
-                                "Введите x: "
+                                "Введите x: ",
+                                "Введите трехзначное число : ",
+                                "Введите трехзначное число : ",
+                                "Enter для продолжения : "
                                 };
 
 void TaskExecute(int ItemIndex, string[] Arguments)
 {
     // Console.WriteLine("debag point 0"); // DEBAG
-    switch (ItemIndex)
+    switch (ItemIndex + 1)
     {
-        case 0:
+        case 1:
             Task19(Convert.ToInt32(Arguments[0]));
             break;
-        case 1:
+        case 2:
             Task21(Convert.ToInt32(Arguments[0]),
                     Convert.ToInt32(Arguments[1]),
                     Convert.ToInt32(Arguments[2]),
@@ -93,11 +150,20 @@ void TaskExecute(int ItemIndex, string[] Arguments)
                     Convert.ToInt32(Arguments[4]),
                     Convert.ToInt32(Arguments[5]));
             break;
-        case 2:
+        case 3:
             Task23(Convert.ToInt32(Arguments[0]));
             break;
-        case 3:
+        case 4:
             AddTask1(Convert.ToDouble(Arguments[0]));
+            break;
+        case 5:
+            AddTask2(Convert.ToInt32(Arguments[0]));
+            break;
+        case 6:
+            AddTask3(Convert.ToInt32(Arguments[0]));
+            break;
+            case 7:
+            AddTask4();
             break;
     }
 }
@@ -163,7 +229,7 @@ void ShowTask(int ItemIndex)
         bool ExitDialogActive = true;
         while (ExitDialogActive) // удерживает пользователя в меню выхода пока не будет выбран один из предусмотренных пунктов.
         {
-            Console.WriteLine("Выберите действие");
+            Console.WriteLine("\r\nВыберите действие");
             MenuSysItem("r", "Повторить выполнение задания");
             MenuSysItem("m", "Вернуться в главное меню");
             MenuSysItem("q", "Завершить программу");
