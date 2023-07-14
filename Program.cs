@@ -208,6 +208,251 @@ void AddDiffTask1(int Quarter)//Решение нменя не удовлетв�
 
 
 }
+
+// Задача 4. Дан массив средних температур (массив заполняется случайно) за последние 10 лет. 
+// На ввод подают номер месяца и год начали и конца.
+// Определить самые высокие и низкие температуры для лета, осени, зимы и весны в заданном промежутке. 
+// Если таких температур нет, сообщить, что определить не удалось.
+
+// пользователь задает год - 1 год 1 месяц - это 1-й год, 1-й месяц, зима, январь. адрес в массиве 0. и т.д.
+int GetMonthIndex(int Month) // с первого по N 1...N соответствует массиву 0... N-1
+{
+    return Month % 12;
+}
+int GetSeasonIndex(int Month)
+{
+    return (((Month) % 12 + 1) / 3) % 4;
+}
+int GetYearIndex(int Month)
+{
+    return Month / 12 + 1;
+}
+string GetMonthName(int Month)
+{
+    switch (GetMonthIndex(Month))
+
+    {
+        case 0:
+            return "Январь";
+            break;
+        case 1:
+            return "Февраль";
+            break;
+        case 2:
+            return "Март";
+            break;
+        case 3:
+            return "Апрель";
+            break;
+        case 4:
+            return "Май";
+            break;
+        case 5:
+            return "Июнь";
+            break;
+        case 6:
+            return "Июль";
+            break;
+        case 7:
+            return "Август";
+            break;
+        case 8:
+            return "Сентябрь";
+            break;
+        case 9:
+            return "Октябрь";
+            break;
+        case 10:
+            return "Ноябрь";
+            break;
+        case 11:
+            return "Декабрь";
+            break;
+        default:
+            return "ERROR";
+            break;
+
+    }
+}
+string GetSeasonName(int Month)
+{
+    switch (GetSeasonIndex(Month))
+
+    {
+        case 0:
+            return "Зима";
+            break;
+        case 1:
+            return "Весна";
+            break;
+        case 2:
+            return "Лето";
+            break;
+        case 3:
+            return "Осень";
+            break;
+        default:
+            return "ERROR";
+            break;
+
+    }
+}
+int GetArrayIndex(int Month)
+{
+    return Month - 1;
+}
+string GetDate(int Month)
+{
+    return $"{GetYearIndex(Month)} год, {GetMonthName(Month)}";
+}
+
+void AddDiffTask4(int Month, int StartYear, int EndYEar)
+{
+    //int Month = 1;
+    //int StartYear = 1;
+    //int EndYEar = 7;
+
+    int StartDate = ((StartYear - 1) * 12) + (Month - 1);
+    int EndDate = ((EndYEar - 1) * 12) + (Month - 1);
+
+    double MinWinterTemper;
+    double MinSpringTemper;
+    double MinSummerTemper;
+    double MinAutumnTemper;
+
+    int MinWinterTemperIndex;
+    int MinSpringTemperIndex;
+    int MinSummerTemperIndex;
+    int MinAutumnTemperIndex;
+
+    double MaxWinterTemper;
+    double MaxSpringTemper;
+    double MaxSummerTemper;
+    double MaxAutumnTemper;
+
+    int MaxWinterTemperIndex;
+    int MaxSpringTemperIndex;
+    int MaxSummerTemperIndex;
+    int MaxAutumnTemperIndex;
+
+
+    double[] Temper = new double[120];
+    Random Rnd = new Random();
+    for (int i = 0; i < Temper.Length; i++)
+    {
+        Temper[i] = Math.Round((Rnd.NextDouble() * 8)+20, 2);
+    }
+    /*Console.WriteLine(string.Join("\t", Temper));
+    for (int i = 0; i < Temper.Length; i++)
+        Console.Write($" {(i) % 12}"); //номер месяца 1 январь ...
+    Console.WriteLine();
+    for (int i = 0; i < Temper.Length; i++)
+        Console.Write($" {(((i) % 12 + 1) / 3) % 4}"); //сезоны 1 зима с декабря
+
+    Console.WriteLine();
+    Console.WriteLine(st);
+    Console.WriteLine(en);*/
+    /*for (int i = st; i < en; i++)
+    {
+        Console.Write($" {Temper[i]}");
+
+    }*/
+    Console.WriteLine();
+   /* for (st = 0; st <= 24; st++)
+    {
+        Console.WriteLine($"# {st + 1} мес.пользователя. # {st} массив. {GetYearIndex(st)}-й год, {GetSeasonIndex(st)}, {GetMonthIndex(st)}");
+        Console.WriteLine($"{GetYearIndex(st)}-й год, {GetSeasonName(st)}, {GetMonthName(st)}");
+    }*/
+    // work code
+    MinWinterTemper = Temper[StartDate];
+    MinSpringTemper = Temper[StartDate];
+    MinSummerTemper = Temper[StartDate];
+    MinAutumnTemper = Temper[StartDate];
+
+    MinWinterTemperIndex = StartDate;
+    MinSpringTemperIndex = StartDate;
+    MinSummerTemperIndex = StartDate;
+    MinAutumnTemperIndex = StartDate;
+
+    MaxWinterTemper = Temper[StartDate];
+    MaxSpringTemper = Temper[StartDate];
+    MaxSummerTemper = Temper[StartDate];
+    MaxAutumnTemper = Temper[StartDate];
+
+    MaxWinterTemperIndex = StartDate;
+    MaxSpringTemperIndex = StartDate;
+    MaxSummerTemperIndex = StartDate;
+    MaxAutumnTemperIndex = StartDate;
+
+    for (int i = StartDate; i < EndDate; i++)
+    {
+        // минимум по зимам
+        if (GetSeasonIndex(i) == 0 && Temper[i] < MinWinterTemper)
+        {
+            MinWinterTemper = Temper[i];
+            MinWinterTemperIndex = i;
+        }
+        // минимум по весне
+        if (GetSeasonIndex(i) == 1 && Temper[i] < MinSpringTemper)
+        {
+            MinSpringTemper = Temper[i];
+            MinSpringTemperIndex = i;
+        }
+        // минимум по лету
+        if (GetSeasonIndex(i) == 2 && Temper[i] < MinSummerTemper)
+        {
+            MinSummerTemper = Temper[i];
+            MinSummerTemperIndex = i;
+        }
+        // минимум по осени
+        if (GetSeasonIndex(i) == 3 && Temper[i] < MinAutumnTemper)
+        {
+            MinAutumnTemper = Temper[i];
+            MinAutumnTemperIndex = i;
+        }
+        // максимум по зимам
+        if (GetSeasonIndex(i) == 0 && Temper[i] > MaxWinterTemper)
+        {
+            MaxWinterTemper = Temper[i];
+            MaxWinterTemperIndex = i;
+        }
+        // максимум по весне
+        if (GetSeasonIndex(i) == 1 && Temper[i] >MaxSpringTemper)
+        {
+            MaxSpringTemper = Temper[i];
+            MaxSpringTemperIndex = i;
+        }
+        // максимум по лету
+        if (GetSeasonIndex(i) == 2 && Temper[i] > MaxSummerTemper)
+        {
+           MaxSummerTemper = Temper[i];
+            MaxSummerTemperIndex = i;
+        }
+        // максимум по осени
+        if (GetSeasonIndex(i) == 3 && Temper[i] > MaxAutumnTemper)
+        {
+            MaxAutumnTemper = Temper[i];
+            MaxAutumnTemperIndex = i;
+        }
+    }
+
+
+    // REPORT
+    Console.WriteLine("Результаты наблюдений за температурой объекта");
+    Console.WriteLine($"Температура в заданном диапазоне {GetYearIndex(StartDate)}-й год, {GetMonthName(StartDate)} - {GetYearIndex(EndDate)}-й год, {GetMonthName(EndDate)}");
+    Console.WriteLine($" Сезон  \t Дата \tIndexArr \t Температура");
+    Console.WriteLine($"Минимальная:");
+    Console.WriteLine($" Зима \t{GetDate(MinWinterTemperIndex)}\t{MinWinterTemperIndex}\t\t{Temper[MinWinterTemperIndex]}'");
+    Console.WriteLine($" Весна\t{GetDate(MinSpringTemperIndex)}\t{MinSpringTemperIndex}\t\t{Temper[MinSpringTemperIndex]}'");
+    Console.WriteLine($" Лето \t{GetDate(MinSummerTemperIndex)}\t{MinSummerTemperIndex}\t\t{Temper[MinSummerTemperIndex]}'");
+    Console.WriteLine($" Осень\t{GetDate(MinAutumnTemperIndex)}\t{MinAutumnTemperIndex}\t\t{Temper[MinAutumnTemperIndex]}'");
+    Console.WriteLine($"Максимальная:");
+    Console.WriteLine($" Зима \t{GetDate(MaxWinterTemperIndex)}\t{MaxWinterTemperIndex}\t\t{Temper[MaxWinterTemperIndex]}'");
+    Console.WriteLine($" Весна\t{GetDate(MaxSpringTemperIndex)}\t{MaxSpringTemperIndex}\t\t{Temper[MaxSpringTemperIndex]}'");
+    Console.WriteLine($" Лето \t{GetDate(MaxSummerTemperIndex)}\t{MaxSummerTemperIndex}\t\t{Temper[MaxSummerTemperIndex]}'");
+    Console.WriteLine($" Осень\t{GetDate(MaxAutumnTemperIndex)}\t{MaxAutumnTemperIndex}\t\t{Temper[MaxAutumnTemperIndex]}'");
+}
+
 // Задача 5. На вход подаётся число n > 4, указывающее длину пароля. Создайте метод, 
 // генерирующий пароль заданной длины. В пароле обязательно использовать цифру, букву и специальный знак.
 void AddDiffTask5(int PassLength)
@@ -220,7 +465,7 @@ void AddDiffTask5(int PassLength)
     string Password = "";
     for (int i = 0; i < PassLength; i++)
         Password += Chars.Substring(Rnd.Next(0, Chars.Length), 1);
-    Console.WriteLine($"Сгенерирован пароль длинною {PassLength} символов: {Password}");
+    Console.WriteLine($"Сгенерирован пароль длиною {PassLength} символов: {Password}");
     Password = "";
     // var 1
     Console.WriteLine($"\r\n\tВариант исполнения II\r\nГарантировано соответствует всем условиям");
@@ -382,7 +627,7 @@ string[] TaskDescription = new string[]{"Напишите программу, к
                                         "На ввод подаётся номер четверти. Создаются 3 случайные точки в этой четверти. Определите самый оптимальный маршрут для торгового менеджера, который выезжает из центра координат.",
                                         "\t\tЕЩЕ НЕ РЕШЕНА",
                                         "\t\tЕЩЕ НЕ РЕШЕНА",
-                                        "\t\tЕЩЕ НЕ РЕШЕНА",
+                                        "Задача 4. Дан массив средних температур (массив заполняется случайно) за последние 10 лет.  На ввод подают номер месяца и год начали и конца. Определить самые высокие и низкие температуры для лета, осени, зимы и весны в заданном промежутке. Если таких температур нет, сообщить, что определить не удалось.",
                                         "На вход подаётся число n > 4, указывающее длину пароля. Создайте метод, генерирующий пароль заданной длины. В пароле обязательно использовать цифру, букву и специальный знак.",
                                         "Из центра координат к точке А(x, y) проведён отрезок АО. Напишите программу, определяющую наименьший угол наклона отрезка AO к оси X.",
                                         "Массив из ста элементов заполняется случайными числами от 1 до 100. Удалить из массива все элементы, содержащие цифру 3. Вывести в консоль новый массив и количество удалённых элементов.",
@@ -399,7 +644,7 @@ string[] TaskNote = new string[]{"Введите пятизначное числ
                                 "Введите номер четверти (1-4): ",
                                 "Press Enter> ",
                                 "Press Enter> ",
-                                "Press Enter> ",
+                                "Введите через пробелы диапазон выборки (месяц год -от -до: 6 3 7): ",
                                 "Введите число больше 4: ",
                                 "Введите через пробел координаты точки A(x y): ",
                                 "Enter для продолжения: ",
@@ -448,7 +693,7 @@ void TaskExecute(int ItemIndex, string[] Arguments)
             //AddDiffTask3();
             break;
         case 11:
-            //AddDiffTask4();
+            AddDiffTask4(Convert.ToInt32(Arguments[0]), Convert.ToInt32(Arguments[1]), Convert.ToInt32(Arguments[2]));
             break;
         case 12:
             AddDiffTask5(Convert.ToInt32(Arguments[0]));
