@@ -36,6 +36,7 @@ void Task23(int Num)
 
     }
 }
+
 //---------------------------------------------------------------------------------------------------------------------------
 //              ДОПОЛНИТЕЛЬНЫЕ ЗАДАНИЯ
 // Задача 1. Рассчитать значение y при заданном x по формуле
@@ -98,6 +99,117 @@ void AddTask4()
         Arr[i] = i+1;
     Console.WriteLine(string.Join(" ", Arr));  
 }
+
+//---------------------------------------------------------------------------------------------------------------------------
+//              ЗАДАНИЯ ПОВЫШЕННОЙ СЛОЖНОСТИ
+
+//Задача 1. На ввод подаётся номер четверти. Создаются 3 случайные точки в этой четверти. Определите самый оптимальный маршрут для торгового менеджера, который выезжает из центра координат.
+void AddDiffTask1(int Quarter)//Решение нменя не удовлетворило. есть изъяны. Маршрут не всегда самый короткий. Не учитывается расстояние на возврат. Принцип основан на приоритете перехода в узел по наименьшему весу ребра.
+{
+    int NodeAmount = 4; // количество узлов
+
+    int[] NodeX = new int[NodeAmount];
+    int[] NodeY = new int[NodeAmount];
+    bool[] NodeFlag = new bool[NodeAmount]; //флаг посищения
+
+    int CurNode = 0; // текущая нода
+
+    double[,] Graph = new double[NodeAmount, NodeAmount];
+
+    double Way = 0; // весь путь
+    int StepCount = 0;
+
+    Random rnd = new Random();
+    int xr = 0;
+    int yr = 0;
+    switch (Quarter)
+    {
+        case 1:
+            xr = 0;
+            yr = 0;
+            break;
+        case 2:
+            xr = 0;
+            yr = 100;
+            break;
+        case 3:
+            xr = 100;
+            yr = 100;
+            break;
+        case 4:
+            xr = 100;
+            yr = 0;
+            break;
+    }
+
+
+    for (int i = 1; i < NodeAmount; i++)
+    {
+        //ген. коорд.
+
+        NodeX[i] = rnd.Next(0 - xr, 100 - xr);
+        NodeY[i] = rnd.Next(0 - yr, 100 - yr);
+    }
+    double MaxWeight = 0;
+    for (int i = 0; i < NodeAmount; i++) // создаем таблицу весов ребер
+        for (int j = 0; j < NodeAmount; j++)
+        {
+            Graph[i, j] = Math.Round(Math.Sqrt(Math.Pow(NodeX[j] - NodeX[i], 2) + Math.Pow(NodeY[j] - NodeY[i], 2)), 2);
+            if (MaxWeight < Graph[i, j])
+                MaxWeight = Graph[i, j];
+        }
+
+
+    // начинаем движение (не забыть заключить в цикл)
+    while (StepCount < NodeAmount - 1)
+    {
+        double MinWeight = 0; // минимальный вес соседней
+        int MinWeightIndex = 0; // индекс нода сминимальным значением
+        NodeFlag[CurNode] = true;
+        MinWeight = 100000000; //Graph[CurNode, NodeAmount - 1];
+        for (int i = 0; i < NodeAmount; i++)// ищем ближайшую от текущей
+        {
+            if (CurNode != i && !NodeFlag[i] && Graph[CurNode, i] < MinWeight) // не сравнивается с собой && не посищалась && текущий легче сохраненного
+            {
+                MinWeight = Graph[CurNode, i];  // адрес ноды с минимальным значением
+                MinWeightIndex = i; // адрес ноды с минимальным значением
+            }
+        }
+        StepCount++;
+        Way += MinWeight;
+        Console.Write($"//Шаг {StepCount}. Переход от ноды {CurNode} к ноде {MinWeightIndex} на расстоянии {MinWeight}. Общий путь: {Way}\r\n");
+        //Console.Write($"Canvas->LineTo({NodeX[MinWeightIndex]},{NodeY[MinWeightIndex]});\r\n"); для визуализации в C++ Builder
+        CurNode = MinWeightIndex;
+    }
+
+
+
+    //Report
+    Console.WriteLine($"Вусь путь пройден за {Way}\r\n");
+    Console.WriteLine("    Таблица веса ребер");
+    Console.WriteLine("\t0\t1\t2\t3");
+    Console.WriteLine("\t______________________________________");
+    for (int Y = 0; Y < NodeAmount; Y++)
+    {
+        Console.Write(Y + " |");
+        for (int X = 0; X < NodeAmount; X++)
+        {
+            if (Graph[X, Y] >= 100)
+                Console.Write($"\t{Graph[X, Y]}");
+            else if (Graph[X, Y] >= 10 && (Graph[X, Y] < 100))
+                Console.Write($"\t{Graph[X, Y]}");
+            else Console.Write($"\t{Graph[X, Y]}");
+        }
+        Console.WriteLine("");
+    }
+    Console.WriteLine("");
+    for (int i = 0; i < NodeAmount; i++)
+        Console.WriteLine($"{i} нода: {NodeX[i]} x {NodeY[i]}");
+
+
+}
+
+
 //---------------------------------------------------------------------------------------------------------------------------
 //                   МЕНЮ
 // переменные меню
@@ -107,7 +219,8 @@ string[] TaskKey = new string[]{"1",
                                 "4",
                                 "5",
                                 "6",
-                                "7"
+                                "7",
+                                "8"
                                 };
 string[] TaskName = new string[]{"Задача 19",
                                 "Задача 21",
@@ -115,7 +228,8 @@ string[] TaskName = new string[]{"Задача 19",
                                 "Задача 1",
                                 "Задача 2",
                                 "Задача 3",
-                                "Задача 4"
+                                "Задача 4",
+                                "Задача пов.cлож. 1"
                                 };
 string[] TaskDescription = new string[]{"Напишите программу, которая принимает на вход пятизначное число и проверяет, является ли оно палиндромом.",
                                        "Напишите программу, которая принимает на вход координаты двух точек и находит расстояние между ними в 3D пространстве.",
@@ -123,7 +237,8 @@ string[] TaskDescription = new string[]{"Напишите программу, к
                                         "Доп. задание: Рассчитать значение y при заданном x по формуле",
                                         "Доп. задание: Дано трёхзначное число N. Определить кратна ли трём сумма всех его цифр.",
                                         "Доп. задание: Дано трёхзначное число N. Определить, есть ли среди его цифр 4 или 7.",
-                                        "Доп. задание: Дан массив длиной 10 элементов. Заполнить его последовательно числами от 1 до 10."
+                                        "Доп. задание: Дан массив длиной 10 элементов. Заполнить его последовательно числами от 1 до 10.",
+                                        "На ввод подаётся номер четверти. Создаются 3 случайные точки в этой четверти. Определите самый оптимальный маршрут для торгового менеджера, который выезжает из центра координат."
                                 };
 string[] TaskNote = new string[]{"Введите пятизначное число: ",
                                 "Введите координаты двух точек в 3D пространстве в формате x1 y1 z1 x2 y2 z2: ",
@@ -131,7 +246,8 @@ string[] TaskNote = new string[]{"Введите пятизначное числ
                                 "Введите x: ",
                                 "Введите трехзначное число : ",
                                 "Введите трехзначное число : ",
-                                "Enter для продолжения : "
+                                "Enter для продолжения : ",
+                                "Введите номер четверти (1-4) :"
                                 };
 
 void TaskExecute(int ItemIndex, string[] Arguments)
@@ -164,6 +280,9 @@ void TaskExecute(int ItemIndex, string[] Arguments)
             break;
             case 7:
             AddTask4();
+            break;
+             case 8:
+            AddDiffTask1(Convert.ToInt32(Arguments[0]));
             break;
     }
 }
