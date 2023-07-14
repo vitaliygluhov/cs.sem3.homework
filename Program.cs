@@ -268,13 +268,41 @@ void AddDiffTask5(int PassLength)
             TempPassword[rand] = "";
             i++;
         }
-        //    Password += 
     }
     Console.WriteLine($"Сгенерирован пароль длинною {PassLength} символов: {Password}");
+}
+//Задача 7. Массив из ста элементов заполняется случайными числами от 1 до 100. Удалить из массива все элементы, содержащие цифру 3. Вывести в консоль новый массив и количество удалённых элементов.
+void AddDiffTask7()
+{
+    // Вариант с удалением элемента массива (уменьшение размера массива)
+    int[] Arr = new int[100];
 
+    int TCount = 0;
+    Random Rnd = new Random();
+    for (int i = 0; i < Arr.Length; i++)
+    {
+        Arr[i] = Rnd.Next(1, 100);
+        if (Arr[i] == 3)
+            TCount++;
+    }
+    int[] ArrOut = new int[Arr.Length - TCount];
+    int DelCount = 0;
+    for (int i = 0, j = 0; i < Arr.Length; i++)
+    {
+        if (Arr[i] != 3)
+        {
+            ArrOut[j] = Arr[i];
+            j++;
+        }
+        else DelCount++;
+    }
 
-
-
+    Console.WriteLine("Оригинальный массив: ");
+        Console.WriteLine(string.Join(" ", Arr));
+        Console.WriteLine("Новый массив: ");
+        Console.WriteLine(string.Join(" ", ArrOut));
+    Console.WriteLine($"\r\n\r\nУдалено троек: {DelCount}");
+    Console.WriteLine($"Новая длина массива: {ArrOut.Length}");
 }
 
 
@@ -328,7 +356,7 @@ string[] TaskDescription = new string[]{"Напишите программу, к
                                         "ЕЩЕ НЕ РЕШЕНА",
                                         "На вход подаётся число n > 4, указывающее длину пароля. Создайте метод, генерирующий пароль заданной длины. В пароле обязательно использовать цифру, букву и специальный знак.",
                                         "ЕЩЕ НЕ РЕШЕНА",
-                                        "ЕЩЕ НЕ РЕШЕНА",
+                                        "Массив из ста элементов заполняется случайными числами от 1 до 100. Удалить из массива все элементы, содержащие цифру 3. Вывести в консоль новый массив и количество удалённых элементов.",
                                         "ЕЩЕ НЕ РЕШЕНА",
                                         "ЕЩЕ НЕ РЕШЕНА"
                                 };
@@ -345,7 +373,7 @@ string[] TaskNote = new string[]{"Введите пятизначное числ
                                 "Press Enter> ",
                                 "Введите число больше 4: ",
                                 "Press Enter> ",
-                                "Press Enter> ",
+                                "Enter для продолжения: ",
                                 "Press Enter> ",
                                 "Press Enter> "
                                 };
@@ -400,7 +428,7 @@ void TaskExecute(int ItemIndex, string[] Arguments)
             //AddDiffTask6();
             break;
         case 14:
-            //AddDiffTask7();
+            AddDiffTask7();
             break;
         case 15:
             //AddDiffTask8();
